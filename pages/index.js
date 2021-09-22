@@ -1,14 +1,16 @@
 import Head from "next/head";
+import { withAuthSync } from "../hocs/AuthHOC";
+import PageContent from "../components/layout/PageContent";
+import Header from "../components/layout/Header";
 
-export default function Home() {
+function Home() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen py-2">
-      <Head>
-        <title>Home</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+    <PageContent title="Home">
+    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
 
-      <main className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
+      <Header />
+
+      <div className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
         <h1 className="text-6xl font-bold">Home Page</h1>
 
         <p className="mt-3 text-2xl">
@@ -17,7 +19,7 @@ export default function Home() {
             pages/index.js
           </code>
         </p>
-      </main>
+      </div>
 
       <footer className="flex items-center justify-center w-full h-24 border-t">
         <a
@@ -31,5 +33,8 @@ export default function Home() {
         </a>
       </footer>
     </div>
+    </PageContent>
   );
 }
+
+export default withAuthSync(Home);
