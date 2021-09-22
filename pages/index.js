@@ -1,38 +1,65 @@
-import Head from "next/head";
+import React, { useState, useEffect } from "react";
 import { withAuthSync } from "../hocs/AuthHOC";
 import PageContent from "../components/layout/PageContent";
 import Header from "../components/layout/Header";
+import { getUserDetails } from "../api/IdentityAPI";
+import { getTwitterPosts } from "../api/StreamAPI";
+import TwitterPost from "../components/TwitterPost";
+import Loading from "../components/Loading";
+
 
 function Home() {
+  const [posts, setPosts] = useState();
+  const [isLoading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setLoading(true);
+    getUserDetails()
+      .then((data) => {
+        const { user } = data;
+        if (user) {
+          const { streams } = user;
+          if (streams.length > 0) {
+            const id = streams[0].id;
+            getTwitterPosts({
+              page: page,
+              "id[]": id,
+              to: "2021-08-05T10:43:45.502Z",
+              start_date: "2021-08-04T20:59:59.999",
+              end_date: "2021-09-03T10:43:45.504",
+              computer: true,
+              popular: false,
+            }).then((data) => {
+              const { documents, stats } = data;
+              setPosts(documents);
+              console.log(documents)
+            });
+          }
+        }
+      })
+      .catch((error) => {})
+      .finally(() => setLoading(false));
+  }, [page]);
+
   return (
     <PageContent title="Home">
-    <div className="flex flex-col items-center justify-center min-h-screen py-2 bg-gray-100">
-
-      <Header />
-
-      <div className="flex flex-col items-center justify-center w-full flex-1 px-20 text-center">
-        <h1 className="text-6xl font-bold">Home Page</h1>
-
-        <p className="mt-3 text-2xl">
-          Get started by editing{" "}
-          <code className="p-3 font-mono text-lg bg-gray-100 rounded-md">
-            pages/index.js
-          </code>
-        </p>
+      <div className="min-h-screen py-2 bg-gray-100">
+        <Header />
+        <div className="px-8 md:px-10 mx-auto w-full">
+          <div className="flex flex-wrap mb-10">
+            {posts
+              ? posts.map((item) => {
+                  return (
+                    <div key={item.id} className="w-full lg:w-6/12 px-2 py-2">
+                      <TwitterPost item={item} />
+                    </div>
+                  );
+                })
+              : <Loading />}
+          </div>
+        </div>
       </div>
-
-      <footer className="flex items-center justify-center w-full h-24 border-t">
-        <a
-          className="flex items-center justify-center"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{" "}
-          <img src="/vercel.svg" alt="Vercel Logo" className="h-4 ml-2" />
-        </a>
-      </footer>
-    </div>
     </PageContent>
   );
 }
