@@ -18,6 +18,7 @@ module.exports = {
       pink: colors.pink,
       black: colors.black,
       white: colors.white,
+      twitterBlue: "#1d9bf0",
     },
   },
   variants: {

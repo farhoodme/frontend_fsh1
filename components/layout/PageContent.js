@@ -6,11 +6,10 @@ const PageContent = (props) => {
     <>
       <Head>
         <title>{title}</title>
+        <link rel="shortcut icon" href="/favicon.ico" />
       </Head>
-      <main>
-        <div className="absolute w-full h-full bg-gray-100">
-          <div className="container mx-auto px-4 h-full">{props.children}</div>
-        </div>
+      <main className="bg-gray-100">
+        <div className="container mx-auto xl:px-20">{props.children}</div>
       </main>
     </>
   );
