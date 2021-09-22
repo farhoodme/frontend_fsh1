@@ -1,29 +1,62 @@
-import {useState} from "react";
+import { useState } from "react";
+import Router from "next/router";
 import PageContent from "../components/layout/PageContent";
 import InputGroup from "../components/InputGroup";
 import Button from "../components/Button";
 import * as Yup from "yup";
 import { useFormik } from "formik";
+import { login } from "../api/AccountAPI";
+import Cookies from "js-cookie";
+import cogoToast from "cogo-toast";
 
 const LoginSchema = Yup.object().shape({
-  username: Yup.string().required("Username is required"),
+  email: Yup.string().required("Email is required"),
   password: Yup.string().required("Password is required"),
 });
 
 export default function Login() {
   const [isLoading, setLoading] = useState(false);
+  const [errorMsg, setErrorMsg] = useState();
 
   const formik = useFormik({
     initialValues: {
-      username: "",
+      email: "",
       password: "",
     },
     validationSchema: LoginSchema,
     onSubmit: (values) => submit(values),
   });
 
-  const submit = ({ username, password }) => {
-    //TODO
+  const submit = async ({ email, password }) => {
+    setLoading(true);
+    setErrorMsg(null);
+    try {
+      await login({ email, password })
+        .then((data) =>
+          Cookies.set("token", {
+            token_type: "Bearer",
+            access_token: data.token,
+          })
+        )
+        .then(() => Router.push("/"))
+        .finally(() => setLoading(false));
+    } catch (error) {
+      setLoading(false);
+      if (error.response.status === 400) {
+        cogoToast.error("Email or Password is invalid", {
+          position: "top-left",
+        });
+      }
+      if (error.response.status === 500) {
+        cogoToast.error("Server error occured", {
+          position: "top-left",
+        });
+      }
+      if (error.response.data) {
+        const { message } = error.response.data;
+        setErrorMsg(message);
+      }
+    }
   };
 
   return (
@@ -43,13 +76,13 @@ export default function Login() {
               <form onSubmit={formik.handleSubmit}>
                 <div className="relative w-full mb-3">
                   <InputGroup
-                    label="Username"
+                    label="Email"
                     type="text"
-                    name="username"
-                    placeholder="Username"
+                    name="email"
+                    placeholder="Email"
                     onChange={formik.handleChange}
-                    value={formik.values.username}
-                    error={formik.errors.username}
+                    value={formik.values.email}
+                    error={formik.errors.email}
                   />
                 </div>
                 <div className="relative w-full mb-3">
@@ -72,6 +105,7 @@ export default function Login() {
                     activeColor="bg-blue-800"
                     textColor="white"
                     extraClass="w-full"
+                    isLoading={isLoading}
                   />
                 </div>
               </form>
