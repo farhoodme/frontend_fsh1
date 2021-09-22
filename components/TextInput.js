@@ -4,7 +4,7 @@ const TextInput = (props) => {
     <input
       type={type}
       name={name}
-      class="border border-gray-300 px-3 py-3 placeholder-gray-300 text-gray-600 bg-white rounded text-sm w-full"
+      className="border border-gray-300 py-3 px-4 placeholder-gray-300 text-gray-600 bg-white rounded-lg text-base w-full"
       placeholder={placeholder}
     />
   );

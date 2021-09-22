@@ -5,7 +5,7 @@ const InputGroup = (props) => {
   return (
     <>
       <label
-        class="block uppercase text-gray-600 text-xs font-bold mb-2"
+        className="block uppercase text-gray-600 text-xs font-bold mb-2"
         htmlFor={name}
       >
         {label}
