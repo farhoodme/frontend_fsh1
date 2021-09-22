@@ -39,9 +39,37 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 ## Unit Test
 
---TODO--
+For unit testing I use [Jest](https://jestjs.io/) testing framework, and tests is writed in __test__ folder, for running test use this command:
+
+```bash
+npm run test
+# or
+yarn test
+```
 
 
 ## How to Deploy
 
---TODO--
+### Node.js Server
+
+You can be deployed to any hosting provider that supports Node.js.
+Make sure your `package.json` has the `build` and `start` scripts:
+
+```bash
+{
+  "scripts": {
+    "dev": "next",
+    "build": "next build",
+    "start": "next start"
+  }
+}
+```
+
+`next build` builds the production application in the `.next` folder. After building, `next start` starts a Node.js server that supports hybrid pages, serving both statically generated and server-side rendered pages.
+
+### Using Docker
+
+1. [Install Docker](https://docs.docker.com/get-docker/) on your machine.
+2. Build your container: `docker build -t nextjs-docker .`.
+3. Run your container: `docker run -p 3000:3000 nextjs-docker`.
+
