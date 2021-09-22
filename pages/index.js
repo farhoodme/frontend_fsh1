@@ -7,11 +7,11 @@ import { getTwitterPosts } from "../api/StreamAPI";
 import TwitterPost from "../components/TwitterPost";
 import Loading from "../components/Loading";
 
-
 function Home() {
-  const [posts, setPosts] = useState();
+  const [posts, setPosts] = useState([]);
   const [isLoading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
     setLoading(true);
@@ -32,8 +32,9 @@ function Home() {
               popular: false,
             }).then((data) => {
               const { documents, stats } = data;
-              setPosts(documents);
-              console.log(documents)
+              let postsArray = [...posts, ...documents];
+              setPosts(postsArray);
+              setTotal(stats.total);
             });
           }
         }
@@ -46,7 +47,7 @@ function Home() {
     <PageContent title="Home">
       <div className="min-h-screen py-2 bg-gray-100">
         <Header />
-        <div className="px-8 md:px-10 mx-auto w-full">
+        <div className="px-2 md:px-10 mx-auto w-full">
           <div className="flex flex-wrap mb-10">
             {posts
               ? posts.map((item) => {
@@ -56,7 +57,21 @@ function Home() {
                     </div>
                   );
                 })
-              : <Loading />}
+              : null}
+            <div className="flex align-center justify-center px-2 py-2 w-full">
+              {isLoading ? (
+                <Loading />
+              ) : posts.length < total ? (
+                <button
+                  className="py-2 px-4 bg-blue-500 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 focus:outline-none"
+                  onClick={() => setPage(page + 1)}
+                >
+                  Load More
+                </button>
+              ) : (
+                <p>There is no more posts</p>
+              )}
+            </div>
           </div>
         </div>
       </div>
