@@ -59,7 +59,7 @@ export default function Login() {
 
   return (
     <PageContent title="Login">
-      <div className="absolute w-full h-full bg-gray-100">
+      <div className="w-full h-screen bg-gray-100">
         <div className="flex content-center items-center justify-center h-full">
           <div className="w-full lg:w-4/12 px-4">
             <div className="relative flex flex-col w-full border border-gray-300 rounded-lg bg-white">

@@ -23,3 +23,7 @@ export const useUser = ({ redirectTo, redirectIfFound } = {}) => {
 
   return error ? null : user;
 };
+
+export const getUserDetails = () => {
+  return api.get("/users/me").then(({ data }) => data);
+};

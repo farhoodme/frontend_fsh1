@@ -10,8 +10,8 @@ const Header = () => {
   };
 
   return (
-    <nav className="top-0 absolute w-full flex flex-wrap items-center justify-between px-3 py-4">
-      <div className="container px-4 mx-auto flex flex-wrap items-center justify-between">
+    <nav className="top-0 w-full flex flex-wrap items-center justify-between px-8 md:px-10 py-4">
+      <div className="container mx-auto flex flex-wrap items-center justify-between px-2">
         <Link href="/">
           <a>
             <h1 className="font-semibold">Home</h1>
