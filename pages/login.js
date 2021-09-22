@@ -1,8 +1,31 @@
+import {useState} from "react";
 import PageContent from "../components/layout/PageContent";
 import InputGroup from "../components/InputGroup";
 import Button from "../components/Button";
+import * as Yup from "yup";
+import { useFormik } from "formik";
+
+const LoginSchema = Yup.object().shape({
+  username: Yup.string().required("Username is required"),
+  password: Yup.string().required("Password is required"),
+});
 
 export default function Login() {
+  const [isLoading, setLoading] = useState(false);
+
+  const formik = useFormik({
+    initialValues: {
+      username: "",
+      password: "",
+    },
+    validationSchema: LoginSchema,
+    onSubmit: (values) => submit(values),
+  });
+
+  const submit = ({ username, password }) => {
+    //TODO
+  };
+
   return (
     <PageContent title="Login">
       <div className="flex content-center items-center justify-center h-full">
@@ -17,13 +40,16 @@ export default function Login() {
               <hr className="mt-6 border-gray-300" />
             </div>
             <div className="flex-auto px-4 lg:px-10 py-10 pt-0">
-              <form>
+              <form onSubmit={formik.handleSubmit}>
                 <div className="relative w-full mb-3">
                   <InputGroup
                     label="Username"
                     type="text"
                     name="username"
                     placeholder="Username"
+                    onChange={formik.handleChange}
+                    value={formik.values.username}
+                    error={formik.errors.username}
                   />
                 </div>
                 <div className="relative w-full mb-3">
@@ -32,6 +58,9 @@ export default function Login() {
                     type="password"
                     name="password"
                     placeholder="Password"
+                    onChange={formik.handleChange}
+                    value={formik.values.password}
+                    error={formik.errors.password}
                   />
                 </div>
                 <div className="text-center mt-6">
