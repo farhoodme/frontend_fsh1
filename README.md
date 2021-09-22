@@ -39,7 +39,13 @@ You can start editing the page by modifying `pages/index.js`. The page auto-upda
 
 ## Unit Test
 
---TODO--
+For unit testing I use [Jest](https://jestjs.io/) testing framework, and tests is writed in __test__ folder, for running test use this command:
+
+```bash
+npm run test
+# or
+yarn test
+```
 
 
 ## How to Deploy
