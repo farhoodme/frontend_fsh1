@@ -1,7 +1,7 @@
 import TextInput from "./TextInput";
 
 const InputGroup = (props) => {
-  const { label, type, name, placeholder } = props;
+  const { label, type, name, placeholder, onChange, value, error } = props;
   return (
     <>
       <label
@@ -10,7 +10,14 @@ const InputGroup = (props) => {
       >
         {label}
       </label>
-      <TextInput type={type} name={name} placeholder={placeholder} />
+      <TextInput
+        type={type}
+        name={name}
+        placeholder={placeholder}
+        onChange={onChange}
+        value={value}
+        error={error}
+      />
     </>
   );
 };
