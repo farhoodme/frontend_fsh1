@@ -12,36 +12,50 @@ function Home() {
   const [isLoading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
+  const [user, setUser] = useState();
 
   useEffect(() => {
-    setLoading(true);
     getUserDetails()
       .then((data) => {
         const { user } = data;
         if (user) {
-          const { streams } = user;
-          if (streams.length > 0) {
-            const id = streams[0].id;
-            getTwitterPosts({
-              page: page,
-              "id[]": id,
-              to: "2021-08-05T10:43:45.502Z",
-              start_date: "2021-08-04T20:59:59.999",
-              end_date: "2021-09-03T10:43:45.504",
-              computer: true,
-              popular: false,
-            }).then((data) => {
-              const { documents, stats } = data;
-              let postsArray = [...posts, ...documents];
-              setPosts(postsArray);
-              setTotal(stats.total);
-            });
-          }
+          setUser(user);
         }
       })
       .catch((error) => {})
       .finally(() => setLoading(false));
-  }, [page]);
+  }, []);
+
+  const fetchPosts = async () => {
+    if (user) {
+      const { streams } = user;
+      if (streams.length > 0) {
+        const id = streams[0].id;
+        setLoading(true);
+        await getTwitterPosts({
+          page: page,
+          "id[]": id,
+          to: "2021-08-05T10:43:45.502Z",
+          start_date: "2021-08-04T20:59:59.999",
+          end_date: "2021-09-03T10:43:45.504",
+          computer: true,
+          popular: false,
+        })
+          .then((data) => {
+            const { documents, stats } = data;
+            let postsArray = [...posts, ...documents];
+            setPosts(postsArray);
+            setTotal(stats.total);
+          })
+          .catch((error) => {})
+          .finally(() => setLoading(false));
+      }
+    }
+  };
+
+  useEffect(() => {
+    fetchPosts();
+  }, [page, user]);
 
   return (
     <PageContent title="Home">
